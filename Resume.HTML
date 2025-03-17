@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Farrel Alvis - Data Management Professional</title>
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Chart.js for visualizations -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+  <style>
+    :root {
+      --primary: #1e3a8a;
+      --primary-light: #3b82f6;
+      --secondary: #0ea5e9;
+      --accent: #06b6d4;
+      --light: #f0f9ff;
+      --dark: #0f172a;
+      --text: #334155;
+      --text-light: #94a3b8;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --spacing: 1rem;
+      --border-radius: 8px;
+      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      --transition: all 0.3s ease;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      color: var(--text);
+      background-color: #f1f5f9;
+    }
+    
+    .container {
+      width: 100%;
+      margin: 0;
+      background-color: white;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    
+    /* Header Styles */
+    .hero {
+      background: linear-gradient(90deg, #1e3a8a 0%, #0ea5e9 100%);
+      color: white;
+      padding: 2rem;
+      position: relative;
+    }
+    
+    .profile-header {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .profile-image {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      background-color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 3rem;
+      color: var(--primary);
+      font-weight: bold;
+      box-shadow: var(--shadow);
+      border: 4px solid var(--light);
+    }
+    
+    .profile-info {
+      flex: 1;
+    }
+    
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .job-title {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      opacity: 0.9;
+    }
+    
+    .contact {
+      display: flex;
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+    }
+    
+    .contact div {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .contact i {
+      font-size: 1.2rem;
+    }
+    
+    /* Navigation Styles */
+    .tabs {
+      display: flex;
+      background-color: white;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      border-bottom: 1px solid #e5e7eb;
+    }
+    
+    .tab {
+      padding: 1rem 1.5rem;
+      cursor: pointer;
+      font-weight: 600;
+      color: var(--text);
+      background-color: transparent;
+      border: none;
+      outline: none;
+      transition: var(--transition);
+      position: relative;
+      flex: 1;
+      text-align: center;
+    }
+    
+    .tab:hover {
+      color: var(--primary);
+    }
+    
+    .tab.active {
+      color: var(--primary);
+      border-bottom: 3px solid var(--primary);
+    }
+    
+    /* Content Styles */
+    .content {
+      padding: 2rem;
+    }
+    
+    .tab-content {
+      display: none;
+      animation: fadeIn 0.5s ease forwards;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .tab-content.active {
+      display: block;
+    }
+    
+    h2 {
+      color: var(--primary);
+      margin-bottom: 1.5rem;
+      font-size: 1.8rem;
+      position: relative;
+      padding-bottom: 0.5rem;
+    }
+    
+    h2::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 50px;
+      height: 3px;
+      background-color: var(--accent);
+    }
+    
+    h3 {
+      color: var(--dark);
+      margin-bottom: 0.5rem;
+      font-size: 1.4rem;
+    }
+    
+    /* Summary Section */
+    .summary {
+      background-color: var(--light);
+      padding: 2rem;
+      border-radius: var(--border-radius);
+      position: relative;
+      margin-bottom: 2rem;
+      border-left: 4px solid var(--primary);
+    }
+    
+    .summary p {
+      font-size: 1.1rem;
+      line-height: 1.7;
+    }
+    
+    /* Experience Section */
+    .timeline {
+      position: relative;
+      margin-top: 2rem;
+    }
+    
+    .timeline::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 10px;
+      width: 2px;
+      background-color: var(--secondary);
+    }
+    
+    .timeline-item {
+      position: relative;
+      padding-left: 40px;
+      padding-bottom: 2.5rem;
+    }
+    
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 5px;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background-color: white;
+      border: 4px solid var(--secondary);
+      z-index: 1;
+    }
+    
+    .timeline-content {
+      background-color: white;
+      padding: 1.5rem;
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+      position: relative;
+    }
+    
+    .date {
+      color: var(--text-light);
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      display: inline-block;
+      background-color: var(--light);
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.9rem;
+    }
+    
+    .company {
+      font-weight: 600;
+      color: var(--primary);
+      margin-bottom: 1rem;
+    }
+    
+    ul {
+      list-style-type: none;
+      margin-top: 1rem;
+    }
+    
+    li {
+      position: relative;
+      padding-left: 1.5rem;
+      margin-bottom: 0.8rem;
+    }
+    
+    li::before {
+      content: '•';
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+      font-weight: bold;
+    }
+    
+    /* Skills Section */
+    .skills-container {
+      margin-top: 2rem;
+      background-color: white;
+    }
+    
+    .skill-category {
+      padding: 1rem;
+      background-color: white;
+    }
+    
+    .skill-bars {
+      margin-top: 1.5rem;
+    }
+    
+    .skill-bar {
+      margin-bottom: 1rem;
+    }
+    
+    .skill-info {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.5rem;
+    }
+    
+    .skill-level {
+      height: 8px;
+      background-color: var(--light);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    
+    .skill-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary) 0%, var(--accent) 100%);
+      border-radius: 4px;
+      width: 0;
+      transition: width 1s ease;
+    }
+    
+    /* Charts Section */
+    .charts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+      margin-bottom: 2rem;
+    }
+    
+    .chart-container {
+      background-color: white;
+      padding: 1.5rem;
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+    }
+    
+    .chart-title {
+      font-size: 1.2rem;
+      color: var(--primary);
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+    
+    /* Projects Section */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+    
+    .project-card {
+      background-color: white;
+      border-radius: var(--border-radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      transition: var(--transition);
+    }
+    
+    .project-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    }
+    
+    .project-image {
+      height: 150px;
+      background-color: var(--light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary);
+      font-size: 3rem;
+    }
+    
+    .project-content {
+      padding: 1.5rem;
+    }
+    
+    .project-title {
+      font-size: 1.2rem;
+      color: var(--primary);
+      margin-bottom: 0.5rem;
+    }
+    
+    .project-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
+    
+    .project-tag {
+      background-color: var(--light);
+      color: var(--primary);
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+    
+    /* Education Section */
+    .education-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+    
+    .education-card {
+      background-color: white;
+      padding: 1.5rem;
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+      transition: var(--transition);
+    }
+    
+    .education-card:hover {
+      transform: translateY(-5px);
+    }
+    
+    .education-year {
+      color: var(--text-light);
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+    
+    .education-degree {
+      font-size: 1.2rem;
+      color: var(--primary);
+      margin-bottom: 0.5rem;
+    }
+    
+    .education-institution {
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+    
+    /* Responsive Styles */
+    @media (max-width: 768px) {
+      .profile-header {
+        flex-direction: column;
+        text-align: center;
+      }
+      
+      .contact {
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+      
+      .tab {
+        padding: 0.75rem 1rem;
+        font-size: 0.9rem;
+      }
+      
+      .charts-grid, .projects-grid, .education-grid, .skills-container {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    /* Dark Mode Toggle */
+    .dark-mode-toggle {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background-color: var(--primary);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: var(--shadow);
+      z-index: 100;
+      transition: var(--transition);
+    }
+    
+    .dark-mode-toggle:hover {
+      transform: scale(1.1);
+    }
+    
+    /* Footer Styles */
+    footer {
+      text-align: center;
+      padding: 2rem;
+      background-color: var(--dark);
+      color: white;
+    }
+    
+    .social-links {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    
+    .social-link {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: rgba(255, 255, 255, 0.1);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition);
+    }
+    
+    .social-link:hover {
+      background-color: var(--primary-light);
+      transform: translateY(-3px);
+    }
+    
+    /* Animation for skill bars */
+    .animate-skills .skill-fill {
+      animation: skillFill 1s ease forwards;
+    }
+    
+    @keyframes skillFill {
+      from { width: 0; }
+      to { width: attr(data-width); }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <section class="hero">
+      <div class="profile-header">
+        <div class="profile-image">
+          <i class="fas fa-user"></i>
+        </div>
+        <div class="profile-info">
+          <h1>Farrel Alvis</h1>
+          <div class="job-title">Senior Manager, Data Management and Optimisation</div>
+          <div class="contact">
+            <div><i class="fas fa-phone"></i> 0406 xxx xxx</div>
+            <div><i class="fas fa-envelope"></i> alvxyxyx@gmail.com</div>
+            <div><i class="fas fa-map-marker-alt"></i> Sydney</div>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <div class="tabs">
+      <button class="tab active" onclick="openTab(event, 'about-tab')">About</button>
+      <button class="tab" onclick="openTab(event, 'experience-tab')">Experience</button>
+      <button class="tab" onclick="openTab(event, 'skills-tab')">Skills</button>
+      <button class="tab" onclick="openTab(event, 'education-tab')">Education</button>
+      <button class="tab" onclick="openTab(event, 'linkedin-tab')">LinkedIn</button>
+    </div>
+    
+    <div class="content">
+      <div id="about-tab" class="tab-content active">
+        <h2>Professional Summary</h2>
+        <div class="summary">
+          <p>Specialist in data management, with deep expertise in business and technical metadata, automation, and AI engineering. Lead initiatives to enhance regulatory reporting, data governance, and operational efficiency through innovative automation strategies. Experienced in team management, optimising metadata frameworks, and implementing AI-driven solutions to streamline reporting and compliance while ensuring data integrity and accessibility.</p>
+        </div>
+        
+        <div class="charts-grid">
+          <div class="chart-container">
+            <h2>Insurance Industry Expertise</h2>
+            <canvas id="focusChart"></canvas>
+          </div>
+          <div class="chart-container">
+            <h2>Financial Services Experience</h2>
+            <canvas id="industryChart"></canvas>
+          </div>
+        </div>
+      </div>
+      
+      <div id="experience-tab" class="tab-content">
+        <h2>Professional Experience</h2>
+        
+        <div class="timeline">
+          <div class="timeline-item">
+            <div class="timeline-content">
+              <span class="date">September 2022 - Present</span>
+              <h3>Senior Manager, Data Management & Optimisation</h3>
+              <div class="company">TAL, Sydney</div>
+              <ul>
+                <li><strong>Data Governance & Metadata Management:</strong> Led the metadata team to enhance data literacy, focusing on developing the business glossary, technical and business lineage, and data quality frameworks using Azure Purview. Collaborated closely with IT, Data Quality, Data Governance teams, and Data Stewards across the business.</li>
+                <li><strong>CDE Framework Development:</strong> Spearheaded the development and reporting of Critical Data Elements and metadata frameworks. Built comprehensive Power BI reporting solutions to support regulatory compliance and enable Data Stewards to easily identify and govern key data elements across the organisation.</li>
+                <li><strong>Technical Data Lineage Tool:</strong> Architected and implemented a Python-based Technical Data Lineage tool, enhancing data traceability and trust across TAL's data ecosystem. Developed an NLP-powered interface to enrich the enterprise business glossary, improving term management and supporting metadata governance.</li>
+                <li><strong>Azure Purview Implementation:</strong> Led the enterprise-wide implementation of Microsoft Azure Purview to manage and govern data assets. Established frameworks to handle Critical and Non-Critical Data Elements and conducted training sessions to onboard users effectively.</li>
+              </ul>
+            </div>
+          </div>
+          
+          <div class="timeline-item">
+            <div class="timeline-content">
+              <span class="date">September 2021 - August 2022</span>
+              <h3>Senior Manager, Reporting & Insights</h3>
+              <div class="company">Westpac/BT, Sydney (Contract)</div>
+              <ul>
+                <li><strong>Self-Service Reporting:</strong> Created self-service reporting solutions using Tableau for operational and customer-driven metrics, enhancing accessibility to key insights.</li>
+                <li><strong>Transition Support:</strong> Supported the BT/Westpac Life transition into the TAL Life business during the merger/acquisition phase, ensuring seamless data integration and reporting continuity.</li>
+                <li><strong>Process Automation:</strong> Automated various manual reports using SQL/SSIS and provided actionable insights through Tableau, reducing manual effort and errors.</li>
+                <li><strong>Team Leadership & Upskilling:</strong> Led a team of five analysts overseeing Retention, Underwriting, and Reinsurance reporting and insights for BT, while enhancing team capabilities through intermediate to advanced-level SQL training, improving overall performance and efficiency.</li>
+              </ul>
+            </div>
+          </div>
+          
+          <div class="timeline-item">
+            <div class="timeline-content">
+              <span class="date">April 2020 - September 2021</span>
+              <h3>Senior Manager, Operational and Customer Insights</h3>
+              <div class="company">AIA Australia, Sydney</div>
+              <ul>
+                <li><strong>Team Leadership:</strong> Led a team of 4 analysts providing operational and customer insights through Tableau for AIA Australia.</li>
+                <li><strong>Regulatory Reporting:</strong> Created, maintained, and provided regulatory insights for APRA, ASIC, Life Code, and other insurance claims, disputes, and policy data submissions.</li>
+                <li><strong>Merger & Acquisition Support:</strong> Played a key role in merger and acquisition projects by providing subject matter expertise, data support, and building new data frameworks across MS SQL, Oracle, and DB2 environments.</li>
+                <li><strong>Data Quality Initiatives:</strong> Introduced and implemented data quality checks and exception reports to enhance data integrity across various data sources.</li>
+                <li><strong>ETL Solution Design:</strong> Designed and developed end-to-end ETL solutions, including data validation, auditing, exception handling frameworks, and SQL job dependency frameworks.</li>
+                <li><strong>Process Automation:</strong> Automated manual reporting processes using SQL/SSIS, providing insights through Tableau and improving operational efficiency.</li>
+                <li><strong>Team Upskilling:</strong> Upskilled Tableau analysts in SSIS frameworks and database management, leading to optimised SQL Server performance and reduced Tableau server constraints.</li>
+              </ul>
+            </div>
+          </div>
+          
+          <div class="timeline-item">
+            <div class="timeline-content">
+              <span class="date">January 2018 - April 2020</span>
+              <h3>Manager, Performance Planning and Reporting, Data and Analytics</h3>
+              <div class="company">CommInsure, Sydney</div>
+              <ul>
+                <li>Led a team of analysts to deliver reporting and analytical insights to CommInsure & CBA stakeholders</li>
+                <li>Supported business leaders and IT projects with analytical insights and MI solutions</li>
+              </ul>
+            </div>
+          </div>
+          
+          <div class="timeline-item">
+            <div class="timeline-content">
+              <span class="date">January 2017 - March 2018</span>
+              <h3>Senior Business Analyst, Data and Analytics</h3>
+              <div class="company">CommInsure, Sydney</div>
+              <ul>
+                <li>Provided analytical and reporting support to CommInsure leaders across multiple departments</li>
+                <li>Implemented ETL packages through SSIS to streamline and automate data processes</li>
+              </ul>
+            </div>
+          </div>
+          
+          <div class="timeline-item">
+            <div class="timeline-content">
+              <span class="date">September 2013 - January 2017</span>
+              <h3>Business Support Analyst, Performance Reporting</h3>
+              <div class="company">CommInsure, Sydney</div>
+              <ul>
+                <li>Provided analytical and reporting support to CommInsure leaders across multiple departments</li>
+                <li>Implemented ETL packages through SSIS to streamline and automate data processes</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div id="skills-tab" class="tab-content">
+        <h2>Skills</h2>
+        
+        <div class="skills-container">
+          <div class="skill-category">
+            <div class="skills-grid" style="display: grid; grid-template-columns: auto 1fr; gap: 15px; align-items: center;">
+              <div style="font-weight: 600;">Data Management</div>
+              <div style="display: flex;">
+                <div style="width: 20px; height: 20px; background-color: #e74c3c; margin-right: 3px;"></div>
+                <div style="width: 20px; height: 20px; background-color: #e74c3c; margin-right: 3px;"></div>
+                <div style="width: 20px; height: 20px; background-color: #e74c3c; margin-right: 3px;"></div>
+                <div style="width: 20px; height: 20px; background-color: #e74c3c; margin-right: 3px;"></div>
+                <div style="width: 20px; height: 20px; background-color: #e74c3c; margin-right: 3px;"></div>
+              </div>
+              
+              <div style="font-weight: 600;">Reporting & Automation</div>
+              <div style="display: flex;">
+                <div style="width: 20px; height: 20px; background-color: #e74c3c; margin-right: 3px;"></div>
+                <div style="width: 20px; height: 20px; background-color: #e74c3c; margin-right: 3px;"></div>
+                <div style="width: 20px; height: 20px; background-color: #e74c3c; margin-right: 3px;"></div>
+                <div style="width: 20px; height: 20px; background-color: #e74c3c; margin-right: 3px;"></div>
+                <div style="width: 20px; height: 20px; background-color: #e74c3c; margin-right: 3px;"></div>
+              </div>
+              
+              <div style="font-weight: 600;">Leadership & Stakeholder Engagement</div>
+              <div style="display: flex;">
+                <div style="width: 20px; height: 20px; background-color: #e74c3c; margin-right: 3px;"></div>
+                <div style="width: 20px; height: 20px; background-color: #e74c3c; margin-right: 3px;"></div>
+                <div style="width: 20px; height: 20px; background-color: #e74c3c; margin-right: 3px;"></div>
+                <div style="width: 20px; height: 20px; background-color: #e74c3c; margin-right: 3px;"></div>
+                <div style="width: 20px; height: 20px; background-color: #e74c3c; margin-right: 3px;"></div>
+              </div>
+              
+              <div style="font-weight: 600;">Technical Skills</div>
+              <div style="display: flex;">
+                <div style="width: 20px; height: 20px; background-color: #e74c3c; margin-right: 3px;"></div>
+                <div style="width: 20px; height: 20px; background-color: #e74c3c; margin-right: 3px;"></div>
+                <div style="width: 20px; height: 20px; background-color: #e74c3c; margin-right: 3px;"></div>
+                <div style="width: 20px; height: 20px; background-color: #e74c3c; margin-right: 3px;"></div>
+                <div style="width: 20px; height: 20px; background-color: #e74c3c; margin-right: 3px;"></div>
+              </div>
+              
+              <div style="font-weight: 600;">Analytics & Insights</div>
+              <div style="display: flex;">
+                <div style="width: 20px; height: 20px; background-color: #e74c3c; margin-right: 3px;"></div>
+                <div style="width: 20px; height: 20px; background-color: #e74c3c; margin-right: 3px;"></div>
+                <div style="width: 20px; height: 20px; background-color: #e74c3c; margin-right: 3px;"></div>
+                <div style="width: 20px; height: 20px; background-color: #e74c3c; margin-right: 3px;"></div>
+                <div style="width: 20px; height: 20px; background-color: #e74c3c; margin-right: 3px;"></div>
+              </div>
+            </div>
+            
+            <div style="margin-top: 30px;">
+              <p><strong>Data Management:</strong> Proven ability to design and implement data governance, data quality processes, and technical data lineage frameworks.</p>
+              <p style="margin-top: 10px;"><strong>Reporting & Automation:</strong> Expert in automating manual processes and developing self-service reporting solutions using tools like SSIS, SQL, Tableau, and Python.</p>
+              <p style="margin-top: 10px;"><strong>Leadership & Stakeholder Engagement:</strong> Proven track record of leading cross-functional teams, influencing stakeholders, and managing large-scale data projects.</p>
+              <p style="margin-top: 10px;"><strong>Technical Skills:</strong> Proficient in Python, SSIS, SQL (MS, Oracle, DB2), Tableau, Microsoft Applications, VBA, C#.NET, VB.NET, Visual Studio, Business Objects, Cognos.</p>
+              <p style="margin-top: 10px;"><strong>Analytics & Insights:</strong> Proficient in translating data into actionable insights through advanced analytics, enhancing business performance.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div id="education-tab" class="tab-content">
+        <h2>Education</h2>
+        
+        <div class="education-grid">
+          <div class="education-card">
+            <div class="education-year">January 2009</div>
+            <div class="education-degree">Commercial Pilot Training</div>
+            <div class="education-institution">Basair Australia</div>
+          </div>
+        </div>
+        
+        <h2 style="margin-top: 2rem;">References</h2>
+        <div class="summary">
+          <p>References available upon request</p>
+        </div>
+      </div>
+      
+      <div id="linkedin-tab" class="tab-content">
+        <h2>Connect on LinkedIn</h2>
+        
+        <div style="text-align: center; margin: 3rem 0;">
+          <div style="font-size: 5rem; color: var(--primary); margin-bottom: 1rem;">
+            <i class="fab fa-linkedin"></i>
+          </div>
+          <p style="font-size: 1.2rem; margin-bottom: 2rem;">Let's connect on LinkedIn to stay in touch professionally.</p>
+          <a href="https://www.linkedin.com/in/farrel-alvis-411a7118/" target="_blank" style="display: inline-block; background-color: var(--primary); color: white; padding: 0.75rem 1.5rem; border-radius: 30px; text-decoration: none; font-weight: 600; transition: var(--transition);">
+            <i class="fab fa-linkedin" style="margin-right: 0.5rem;"></i> View LinkedIn Profile
+          </a>
+        </div>
+      </div>
+    </div>
+    
+    <footer>
+      <p>&copy; 2025 Farrel Alvis. All rights reserved.</p>
+      <div class="social-links">
+        <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+        <a href="#" class="social-link"><i class="fab fa-github"></i></a>
+        <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+      </div>
+    </footer>
+  </div>
+  
+  <div class="dark-mode-toggle" onclick="toggleDarkMode()">
+    <i class="fas fa-moon"></i>
+  </div>
+  
+  <script>
+    // Tab functionality
+    function openTab(evt, tabId) {
+      const tabContents = document.getElementsByClassName("tab-content");
+      for (let i = 0; i < tabContents.length; i++) {
+        tabContents[i].classList.remove("active");
+      }
+      
+      const tabs = document.getElementsByClassName("tab");
+      for (let i = 0; i < tabs.length; i++) {
+        tabs[i].classList.remove("active");
+      }
+      
+      document.getElementById(tabId).classList.add("active");
+      evt.currentTarget.classList.add("active");
+      
+      // Initialize charts if about tab is selected
+      if (tabId === 'about-tab') {
+        initCharts();
+      }
+      
+      // Animate skills if skills tab is selected
+      if (tabId === 'skills-tab') {
+        document.querySelectorAll('.skill-fill').forEach(fill => {
+          fill.style.width = fill.getAttribute('data-width');
+        });
+      }
+    }
+    
+    // Initialize charts
+    function initCharts() {
+      // Focus areas chart
+      const focusCtx = document.getElementById('focusChart').getContext('2d');
+      const focusChart = new Chart(focusCtx, {
+        type: 'radar',
+        data: {
+          labels: ['Data Governance', 'Metadata Management', 'Technical Lineage', 'Regulatory Reporting', 'Process Automation'],
+          datasets: [{
+            label: 'Expertise Level',
+            data: [95, 98, 90, 85, 92],
+            backgroundColor: 'rgba(14, 165, 233, 0.2)',
+            borderColor: 'rgba(14, 165, 233, 1)',
+            pointBackgroundColor: 'rgba(14, 165, 233, 1)',
+            pointBorderColor: '#fff',
+            pointHoverBackgroundColor: '#fff',
+            pointHoverBorderColor: 'rgba(14, 165, 233, 1)'
+          }]
+        },
+        options: {
+          scales: {
+            r: {
+              angleLines: {
+                display: true
+              },
+              suggestedMin: 50,
+              suggestedMax: 100
+            }
+          }
+        }
+      });
+      
+      // Industry experience chart
+      const industryCtx = document.getElementById('industryChart').getContext('2d');
+      const industryChart = new Chart(industryCtx, {
+        type: 'doughnut',
+        data: {
+          labels: ['Life Insurance', 'Banking', 'Superannuation', 'Other Financial Services'],
+          datasets: [{
+            data: [60, 25, 10, 5],
+            backgroundColor: [
+              'rgba(30, 58, 138, 0.8)',
+              'rgba(59, 130, 246, 0.8)',
+              'rgba(14, 165, 233, 0.8)',
+              'rgba(6, 182, 212, 0.8)'
+            ],
+            borderColor: [
+              'rgba(30, 58, 138, 1)',
+              'rgba(59, 130, 246, 1)',
+              'rgba(14, 165, 233, 1)',
+              'rgba(6, 182, 212, 1)'
+            ],
+            borderWidth: 1
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {
+              position: 'bottom',
+            }
+          }
+        }
+      });
+    }
+    
+   
+    function toggleDarkMode() {
+      document.body.classList.toggle('dark-mode');
+      const icon = document.querySelector('.dark-mode-toggle i');
+      if (document.body.classList.contains('dark-mode')) {
+        icon.classList.remove('fa-moon');
+        icon.classList.add('fa-sun');
+      } else {
+        icon.classList.remove('fa-sun');
+        icon.classList.add('fa-moon');
+      }
+    }
+    
+
+    window.onload = function() {
+      initCharts();
+    };
+  </script>
+</body>
+</html>
